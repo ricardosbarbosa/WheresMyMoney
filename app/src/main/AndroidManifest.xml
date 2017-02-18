@@ -9,14 +9,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
+            android:name=".activity.MovimentacaoListActivity"
+            android:label="@string/title_movimentacao_list"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.MovimentacaoDetailActivity"
+            android:label="@string/title_movimentacao_detail"
+            android:parentActivityName=".activity.MovimentacaoListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.ricardobarbosa.wheresmymoney.activity.MovimentacaoListActivity" />
         </activity>
     </application>
 

@@ -5,4 +5,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="title_movimentacao_list">Movimentacoes</string>
+    <string name="title_movimentacao_detail">Movimentacao Detail</string>
 </resources>
