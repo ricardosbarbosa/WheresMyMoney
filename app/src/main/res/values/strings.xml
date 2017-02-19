@@ -81,4 +81,5 @@
 
     <string name="id_fmt">User ID: %s</string>
     <string name="email_fmt">Email: %s</string>
+    <string name="title_activity_login2">Sign in</string>
 </resources>

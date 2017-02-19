@@ -2,6 +2,7 @@ package com.github.ricardobarbosa.wheresmymoney.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -24,6 +25,8 @@ import android.widget.TextView;
 import com.github.ricardobarbosa.wheresmymoney.R;
 import com.github.ricardobarbosa.wheresmymoney.dummy.DummyContent;
 import com.github.ricardobarbosa.wheresmymoney.fragment.MovimentacaoDetailFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -81,6 +84,35 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerLayout = navigationView.getHeaderView(0);
+
+        TextView nameUserTextView = (TextView) headerLayout.findViewById(R.id.nameUserTextView);
+        TextView emailUserTextView = (TextView) headerLayout.findViewById(R.id.emailUserTextView);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName() ;
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+
+            nameUserTextView.setText(name);
+            emailUserTextView.setText(email);
+
+            // The user's ID, unique to the Firebase project. Do NOT use this value to
+            // authenticate with your backend server, if you have one. Use
+            // FirebaseUser.getToken() instead.
+            String uid = user.getUid();
+        }
+        else {
+            Intent intent = new Intent(this, LoginActivity2.class);
+            this.startActivity(intent);
+
+        }
+
+
+
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
