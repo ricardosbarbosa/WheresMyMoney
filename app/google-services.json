@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "402774588389",
+    "firebase_url": "https://wheresmymoney-146f9.firebaseio.com",
+    "project_id": "wheresmymoney-146f9",
+    "storage_bucket": "wheresmymoney-146f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402774588389:android:f052b04e0bb5a397",
+        "android_client_info": {
+          "package_name": "com.github.ricardobarbosa.wheresmymoney"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402774588389-t5042danm1302j4n019ub40cfjjbs4ag.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.ricardobarbosa.wheresmymoney",
+            "certificate_hash": "221711F7AEEAAE60CBD8387F503171DF10299F7E"
+          }
+        },
+        {
+          "client_id": "402774588389-skdoeqqafkipco70suv5l966rkjp91bf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9DKHQ_LpTf8hKKvM46omLC_mPH_QLgPU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "402774588389-skdoeqqafkipco70suv5l966rkjp91bf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
