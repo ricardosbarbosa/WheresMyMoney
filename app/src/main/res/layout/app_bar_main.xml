@@ -21,14 +21,45 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/movimentacao_list" />
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <include layout="@layout/movimentacao_list" android:layout_height="match_parent" android:layout_width="match_parent"/>
+    </FrameLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:menu_fab_size="normal"
+        app:menu_icon="@drawable/fab_add"
+        app:menu_colorNormal="@color/colorAccent"
+        app:menu_backgroundColor="@android:color/transparent"
+        app:menu_fab_label=""
+        android:layout_margin="@dimen/fab_margin">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_despesas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            app:fab_size="mini"
+            app:fab_label="Despesas"
+            app:fab_colorNormal="@color/red_a700"/>
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_receitas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            app:fab_size="mini"
+            app:fab_label="Receitas"
+            app:fab_colorNormal="@color/green_a700"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>

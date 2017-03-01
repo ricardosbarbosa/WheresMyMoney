@@ -34,6 +34,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.facebook.stetho.Stetho;
 import com.github.ricardobarbosa.wheresmymoney.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -71,6 +72,9 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Stetho.initializeWithDefaults(this);
+
         setContentView(R.layout.activity_login2);
 
         mAuth = FirebaseAuth.getInstance();

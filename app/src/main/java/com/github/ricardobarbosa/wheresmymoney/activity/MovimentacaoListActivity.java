@@ -2,29 +2,42 @@ package com.github.ricardobarbosa.wheresmymoney.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.facebook.stetho.Stetho;
+import com.github.clans.fab.FloatingActionButton;
 import com.github.ricardobarbosa.wheresmymoney.R;
-import com.github.ricardobarbosa.wheresmymoney.dummy.DummyContent;
+import com.github.ricardobarbosa.wheresmymoney.adapters.MovimentacaoCursorAdapter;
+import com.github.ricardobarbosa.wheresmymoney.adapters.OnStartDragListener;
+import com.github.ricardobarbosa.wheresmymoney.adapters.SimpleItemTouchHelperCallback;
+import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract;
+import com.github.ricardobarbosa.wheresmymoney.data.WhereIsMyMoneyDataProvider;
 import com.github.ricardobarbosa.wheresmymoney.fragment.MovimentacaoDetailFragment;
+import com.github.ricardobarbosa.wheresmymoney.model.EnumMovimentacaoTipo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -38,35 +51,64 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class MovimentacaoListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MovimentacaoListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener ,
+        LoaderManager.LoaderCallbacks<Cursor>, OnStartDragListener {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
     private boolean mTwoPane;
+    private RecyclerView recyclerView;
+    private MovimentacaoCursorAdapter mAdapter;
+    private int mPosition = RecyclerView.NO_POSITION;
+    private static final String SELECTED_KEY = "selected_position";
+    private ItemTouchHelper mItemTouchHelper;
 
+    private static final int FORECAST_LOADER = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movimentacao_list);
 
+        Stetho.initializeWithDefaults(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fabDespesas = (FloatingActionButton) findViewById(R.id.fab_despesas);
+        fabDespesas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(view.getContext(), MovimentacaoFormActivity.class);
+                intent.putExtra("tipo", EnumMovimentacaoTipo.DESPESA.name());
+                startActivity(intent);
             }
         });
 
-        View recyclerView = findViewById(R.id.movimentacao_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        FloatingActionButton fabReceitas = (FloatingActionButton) findViewById(R.id.fab_receitas);
+        fabReceitas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MovimentacaoFormActivity.class);
+                intent.putExtra("tipo", EnumMovimentacaoTipo.RECEITA.name());
+                startActivity(intent);
+            }
+        });
+
+
+
+        View view = findViewById(R.id.movimentacao_list);
+        assert view != null;
+        recyclerView = (RecyclerView) view;
+        getSupportLoaderManager().initLoader(FORECAST_LOADER, null, this);
+        mAdapter = new MovimentacaoCursorAdapter(this, null, mTwoPane, this);
+        recyclerView.setAdapter(mAdapter);
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(recyclerView);
 
         if (findViewById(R.id.movimentacao_detail_container) != null) {
             // The detail container view will be present only in the
@@ -74,6 +116,17 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
+        }
+
+        // If there's instance state, mine it for useful information.
+        // The end-goal here is that the user never knows that turning their device sideways
+        // does crazy lifecycle related things.  It should feel like some stuff stretched out,
+        // or magically appeared to take advantage of room, but data or place in the app was never
+        // actually *lost*.
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            // The listview probably hasn't even been populated yet.  Actually perform the
+            // swapout in onLoadFinished.
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -108,15 +161,8 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
         else {
             Intent intent = new Intent(this, LoginActivity2.class);
             this.startActivity(intent);
-
         }
 
-
-
-    }
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
     }
 
     @Override
@@ -156,91 +202,52 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_contas) {
+            Intent intent = new Intent(this, ContaListActivity.class);
+            this.startActivity(intent);
+        } else if (id == R.id.nav_categorias) {
+            Intent intent = new Intent(this, CategoriaListActivity.class);
+            this.startActivity(intent);
+        } else if (id == R.id.nav_movimentacoes) {
+            Intent intent = new Intent(this, MovimentacaoListActivity.class);
+            this.startActivity(intent);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String sortOrder = WIMMContract.MovimentacaoEntry.COLUMN_DATA + " ASC";
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-            mValues = items;
+        return new CursorLoader(this,
+                WIMMContract.MovimentacaoEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                sortOrder);
+    }
+
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+        if (mPosition != ListView.INVALID_POSITION) {
+            // If we don't need to restart the loader, and there's a desired position to restore
+            // to, do so now.
+            recyclerView.smoothScrollToPosition(mPosition);
         }
+    }
 
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.movimentacao_list_content, parent, false);
-            return new ViewHolder(view);
-        }
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
+    }
 
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(MovimentacaoDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        MovimentacaoDetailFragment fragment = new MovimentacaoDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.movimentacao_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, MovimentacaoDetailActivity.class);
-                        intent.putExtra(MovimentacaoDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-
-                        context.startActivity(intent);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
-            }
-        }
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 }

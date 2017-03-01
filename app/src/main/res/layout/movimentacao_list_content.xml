@@ -1,20 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    >
 
-    <TextView
-        android:id="@+id/id"
+    <FrameLayout
+        android:id="@+id/frameBolinhas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true">
+        <View
+            android:id="@+id/bolinha_verde"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/bolinha_verde"
+            />
+        <View
+            android:id="@+id/bolinha_vermelha"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/bolinha_vermelha"
+            />
+    </FrameLayout>
 
-    <TextView
-        android:id="@+id/content"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
-</LinearLayout>
+        android:layout_alignStart="@+id/frameBolinhas"
+        android:layout_alignLeft="@+id/frameBolinhas"
+        android:layout_centerVertical="true">
+        <TextView
+            tools:text="Teste"
+            android:id="@+id/descricao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceListItem" />
+        <TextView
+            tools:text="Teste"
+            android:id="@+id/data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:gravity="end">
+        <TextView
+            tools:text="Teste"
+            android:id="@+id/valor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textAppearance="?attr/textAppearanceListItem" />
+        <TextView
+            tools:text="Teste"
+            android:id="@+id/categoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+    </LinearLayout>
+
+
+</RelativeLayout>

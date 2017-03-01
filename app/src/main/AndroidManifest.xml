@@ -3,6 +3,7 @@
     package="com.github.ricardobarbosa.wheresmymoney">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -39,8 +40,77 @@
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".LoginActivity2"
-            android:label="@string/title_activity_login2"></activity>
+            android:name=".activity.LoginActivity2"
+            android:label="@string/title_activity_login2" />
+
+        <provider
+            android:name=".data.WhereIsMyMoneyDataProvider"
+            android:authorities="com.github.ricardosbarbosa.whereismymoney.app" />
+
+        <activity
+            android:name=".activity.ContaListActivity"
+            android:label="@string/title_conta_list"
+            android:parentActivityName=".activity.MovimentacaoListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.ricardobarbosa.wheresmymoney.activity.MovimentacaoListActivity" />
+        </activity>
+        <activity
+            android:name=".activity.ContaDetailActivity"
+            android:label="@string/title_conta_detail"
+            android:parentActivityName=".activity.ContaListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.ricardobarbosa.wheresmymoney.activity.ContaListActivity" />
+        </activity>
+        <activity
+            android:name=".activity.CategoriaListActivity"
+            android:label="@string/title_categoria_list"
+            android:parentActivityName=".activity.MovimentacaoListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.ricardobarbosa.wheresmymoney.activity.MovimentacaoListActivity" />
+        </activity>
+        <activity
+            android:name=".activity.CategoriaDetailActivity"
+            android:label="@string/title_categoria_detail"
+            android:parentActivityName=".activity.CategoriaListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.ricardobarbosa.wheresmymoney.activity.CategoriaListActivity" />
+        </activity>
+
+        <activity android:name=".activity.ContaFormActivity"
+            android:label="Movimentacao"
+            android:parentActivityName=".activity.ContaListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.ricardobarbosa.wheresmymoney.activity.ContaListActivity" />
+        </activity>
+
+        <activity android:name=".activity.CategoriaFormActivity"
+            android:label="Movimentacao"
+            android:parentActivityName=".activity.CategoriaListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.ricardobarbosa.wheresmymoney.activity.CategoriaListActivity" />
+        </activity>
+
+        <activity
+            android:name=".activity.MovimentacaoFormActivity"
+            android:label="@string/title_movimentacao_detail"
+            android:parentActivityName=".activity.MovimentacaoListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.ricardobarbosa.wheresmymoney.activity.MovimentacaoListActivity" />
+        </activity>
     </application>
 
 </manifest>

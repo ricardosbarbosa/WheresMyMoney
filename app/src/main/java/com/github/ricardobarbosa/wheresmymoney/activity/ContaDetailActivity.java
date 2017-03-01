@@ -12,21 +12,21 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import com.github.ricardobarbosa.wheresmymoney.R;
-import com.github.ricardobarbosa.wheresmymoney.fragment.MovimentacaoDetailFragment;
-import com.github.ricardobarbosa.wheresmymoney.model.Movimentacao;
+import com.github.ricardobarbosa.wheresmymoney.fragment.ContaDetailFragment;
+import com.github.ricardobarbosa.wheresmymoney.model.Conta;
 
 /**
- * An activity representing a single Movimentacao detail screen. This
+ * An activity representing a single Conta detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link MovimentacaoListActivity}.
+ * in a {@link ContaListActivity}.
  */
-public class MovimentacaoDetailActivity extends AppCompatActivity {
+public class ContaDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movimentacao_detail);
+        setContentView(R.layout.activity_conta_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
@@ -58,12 +58,12 @@ public class MovimentacaoDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(Movimentacao.PARCELABLE_KEY,
-                    getIntent().getStringExtra(Movimentacao.PARCELABLE_KEY));
-            MovimentacaoDetailFragment fragment = new MovimentacaoDetailFragment();
+            arguments.putParcelable(Conta.PARCELABLE_KEY,
+                    getIntent().getParcelableExtra(Conta.PARCELABLE_KEY));
+            ContaDetailFragment fragment = new ContaDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.movimentacao_detail_container, fragment)
+                    .add(R.id.conta_detail_container, fragment)
                     .commit();
         }
     }
@@ -79,7 +79,7 @@ public class MovimentacaoDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, MovimentacaoListActivity.class));
+            NavUtils.navigateUpTo(this, new Intent(this, ContaListActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
