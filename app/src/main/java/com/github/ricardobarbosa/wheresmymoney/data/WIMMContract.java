@@ -71,6 +71,9 @@ public class WIMMContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static Integer getContaIdFromUri(Uri uri) {
+            return Integer.parseInt((uri.getPathSegments().get(1)));
+        }
     }
 
     /* Inner class that defines the table contents of the weather table */

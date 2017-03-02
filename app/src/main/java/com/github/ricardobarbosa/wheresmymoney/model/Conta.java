@@ -1,13 +1,16 @@
 package com.github.ricardobarbosa.wheresmymoney.model;
 
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
-import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract;
+import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract.ContaEntry;
 import com.google.firebase.database.Exclude;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,10 +35,10 @@ public class Conta implements Parcelable{
     }
 
     public Conta(Cursor cursor ) {
-//        this.id = cursor.getInt(cursor.getColumnIndex(WIMMContract.ContaEntry._ID));
-        this.nome = cursor.getString(cursor.getColumnIndex(WIMMContract.ContaEntry.COLUMN_NOME));
-        this.tipo = EnumContaTipo.valueOf(cursor.getString(cursor.getColumnIndex(WIMMContract.ContaEntry.COLUMN_TIPO)));
-        this.saldo = cursor.getDouble(cursor.getColumnIndex(WIMMContract.ContaEntry.COLUMN_SALDO));
+//        this.id = cursor.getInt(cursor.getColumnIndex(ContaEntry._ID));
+        this.nome = cursor.getString(cursor.getColumnIndex(ContaEntry.COLUMN_NOME));
+        this.tipo = EnumContaTipo.valueOf(cursor.getString(cursor.getColumnIndex(ContaEntry.COLUMN_TIPO)));
+        this.saldo = cursor.getDouble(cursor.getColumnIndex(ContaEntry.COLUMN_SALDO));
     }
     public String getNome() {
         return nome;
@@ -134,4 +137,19 @@ public class Conta implements Parcelable{
             return new Conta[size];
         }
     };
+
+    public Double addValor(Double valor) {
+        this.saldo += valor;
+        return saldo;
+    }
+
+    public ContentValues getValues() {
+        ContentValues values = new ContentValues();
+
+        values.put(ContaEntry.COLUMN_NOME, this.nome);
+        values.put(ContaEntry.COLUMN_SALDO, this.saldo);
+        values.put(ContaEntry.COLUMN_TIPO, this.tipo.name());
+
+        return values;
+    }
 }

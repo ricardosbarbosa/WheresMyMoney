@@ -1,12 +1,15 @@
 package com.github.ricardobarbosa.wheresmymoney.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 
 import com.github.dkharrat.nexusdialog.FormController;
 import com.github.dkharrat.nexusdialog.FormFragment;
@@ -14,10 +17,12 @@ import com.github.dkharrat.nexusdialog.controllers.DatePickerController;
 import com.github.dkharrat.nexusdialog.controllers.EditTextController;
 import com.github.dkharrat.nexusdialog.controllers.FormSectionController;
 import com.github.dkharrat.nexusdialog.controllers.SelectionController;
-import com.github.dkharrat.nexusdialog.utils.MessageUtil;
+import com.github.ricardobarbosa.wheresmymoney.data.MovieDbHelper;
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract.CategoriaEntry;
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract.ContaEntry;
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract.MovimentacaoEntry;
+import com.github.ricardobarbosa.wheresmymoney.data.WhereIsMyMoneyDataProvider;
+import com.github.ricardobarbosa.wheresmymoney.model.Conta;
 import com.github.ricardobarbosa.wheresmymoney.model.EnumMovimentacaoTipo;
 
 import java.text.SimpleDateFormat;
@@ -26,6 +31,9 @@ import java.util.Date;
 import java.util.List;
 
 public class MovimentacaoFormFragment extends FormFragment {
+
+    public static final String TAG = "MovimentacaoFormFragment";
+
     public static final String CONTA = "conta";
     public static final String CATEGORIA = "categoria";
     public static final String DESCRICAO = "descricao";
@@ -36,15 +44,15 @@ public class MovimentacaoFormFragment extends FormFragment {
     public boolean validate() {
         getFormController().resetValidationErrors();
         if (getFormController().isValidInput()) {
-            Object conta = getModel().getValue(CONTA);
-            Object categoria = getModel().getValue(CATEGORIA);
-            Object descricao = getModel().getValue(DESCRICAO);
-            Object tipo = getModel().getValue(TIPO);
-            Object valor = getModel().getValue(VALOR);
-            Object data = getModel().getValue(DATA);
 
+            Bundle bundle = getArguments();
+            String tipoStrg = getActivity().getIntent().getExtras().getString("tipo");
 
-            insertMovimentacao();
+            if (bundle != null) {
+                tipoStrg = bundle.getString("tipo", "TRANSFERENCIA");
+            }
+
+            insertMovimentacaoTransaction(EnumMovimentacaoTipo.valueOf(tipoStrg));
         } else {
             getFormController().showValidationErrors();
             return false;
@@ -52,17 +60,11 @@ public class MovimentacaoFormFragment extends FormFragment {
         return true;
     }
 
-    private long insertMovimentacao() {
+    private long insertMovimentacao(EnumMovimentacaoTipo enumMovimentacaoTipo, SQLiteDatabase db) {
         long contaID;
+
         ContentValues values = new ContentValues();
-
-        Bundle bundle = getArguments();
-        String tipoStrg = getActivity().getIntent().getExtras().getString("tipo");
-        if (bundle != null) {
-            tipoStrg = bundle.getString("tipo", "TRANSFERENCIA");
-        }
-
-        values.put(MovimentacaoEntry.COLUMN_TIPO, tipoStrg);
+        values.put(MovimentacaoEntry.COLUMN_TIPO, enumMovimentacaoTipo.name());
 
         values.put(MovimentacaoEntry.COLUMN_DESCRICAO, (String) getModel().getValue(DESCRICAO));
         values.put(MovimentacaoEntry.COLUMN_VALOR, Double.valueOf(getModel().getValue(VALOR).toString()));
@@ -73,12 +75,62 @@ public class MovimentacaoFormFragment extends FormFragment {
         values.put(MovimentacaoEntry.COLUMN_CATEGORIA_KEY, (Integer) getModel().getValue(CATEGORIA));
         values.put(MovimentacaoEntry.COLUMN_CONTA_KEY, (Integer)  getModel().getValue(CONTA));
 
-        Uri insertedUri = getContext().getContentResolver().insert(MovimentacaoEntry.CONTENT_URI, values);
+//        Uri insertedUri = getContext().getContentResolver().insert(MovimentacaoEntry.CONTENT_URI, values);
+//        contaID = ContentUris.parseId(insertedUri);
 
-        contaID = ContentUris.parseId(insertedUri);
+        contaID = db.insert(MovimentacaoEntry.TABLE_NAME, null,  values);
+
+
 
         return contaID;
     }
+
+    private Integer updateConta(EnumMovimentacaoTipo enumMovimentacaoTipo, SQLiteDatabase db) {
+        Integer contaId = (Integer) getModel().getValue(CONTA);
+
+        String where = ContaEntry._ID + " = ?";
+        String[] selectionArgs = new String[]{contaId.toString()};
+
+        Cursor cursor = db.query(ContaEntry.TABLE_NAME, null, where, selectionArgs, null, null, null);
+
+        cursor.moveToFirst();
+        Conta conta = new Conta(cursor);
+
+        Double valor = Double.valueOf(getModel().getValue(VALOR).toString());
+        Double saldo;
+        if (enumMovimentacaoTipo.equals(EnumMovimentacaoTipo.DESPESA) ){
+            saldo = conta.addValor(-valor);
+        } else {
+            saldo = conta.addValor(valor);
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(ContaEntry.COLUMN_SALDO, saldo);
+
+        Integer rows = db.update(ContaEntry.TABLE_NAME, values, where, selectionArgs);
+
+        return rows;
+    }
+
+    @SuppressLint("LongLogTag")
+    private void insertMovimentacaoTransaction(EnumMovimentacaoTipo enumMovimentacaoTipo) {
+        MovieDbHelper mOpenHelper = new MovieDbHelper(getContext());
+        SQLiteDatabase db = mOpenHelper.getWritableDatabase();;
+        db.beginTransaction();
+        try {
+
+            updateConta(enumMovimentacaoTipo, db);
+            insertMovimentacao(enumMovimentacaoTipo, db);
+
+            db.setTransactionSuccessful();
+        } catch (Exception e){
+            //Error in between database transaction
+            Log.d(TAG, "Nao foi possível salvar ", e.fillInStackTrace());
+        } finally {
+            db.endTransaction();
+        }
+    }
+
 
     @Override
     public void initForm(FormController controller) {

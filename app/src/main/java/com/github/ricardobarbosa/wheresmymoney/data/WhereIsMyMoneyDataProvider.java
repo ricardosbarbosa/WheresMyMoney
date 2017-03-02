@@ -24,6 +24,7 @@ public class WhereIsMyMoneyDataProvider extends ContentProvider {
 
 
     static final int CONTA = 100;
+    static final int CONTA_BY = 101;
 
     static final int CATEGORIA = 200;
 
@@ -68,6 +69,8 @@ public class WhereIsMyMoneyDataProvider extends ContentProvider {
         final String authority = CONTENT_AUTHORITY;
 
         matcher.addURI(authority, PATH_CONTA, CONTA);
+        matcher.addURI(authority, PATH_CONTA+ "/#" , CONTA_BY);
+
         matcher.addURI(authority, PATH_CATEGORIA, CATEGORIA);
         matcher.addURI(authority, PATH_MOVIMENTACAO, MOVIMENTACAO);
         matcher.addURI(authority, PATH_TRANSFERENCIA, TRANSFERENCIA);
@@ -99,6 +102,9 @@ public class WhereIsMyMoneyDataProvider extends ContentProvider {
         switch (match) {
             case CONTA:
                 return ContaEntry.CONTENT_TYPE;
+            case CONTA_BY:
+                return ContaEntry.CONTENT_ITEM_TYPE;
+
             case CATEGORIA:
                 return CategoriaEntry.CONTENT_TYPE;
 
@@ -131,10 +137,16 @@ public class WhereIsMyMoneyDataProvider extends ContentProvider {
         // and query the database accordingly.
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
-            // "categoria"
+            // "conta"
             case CONTA:
             {
                 retCursor = mOpenHelper.getReadableDatabase().query(ContaEntry.TABLE_NAME,  projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            }
+            // "conta by"
+            case CONTA_BY:
+            {
+                retCursor = getContaId(uri, projection, sortOrder);
                 break;
             }
             // "categoria"
@@ -190,6 +202,14 @@ public class WhereIsMyMoneyDataProvider extends ContentProvider {
 
     private Cursor getAllMovimentacoes(Uri uri, String[] projection, String sortOrder) {
         return sMovimentacoesByContaIdQueryBuilder.query(mOpenHelper.getReadableDatabase(), projection, null, null, null, null, sortOrder);
+    }
+    private Cursor getContaId(Uri uri, String[] projection, String sortOrder) {
+        Integer contaId = ContaEntry.getContaIdFromUri(uri);
+
+        String[] selectionArgs = new String[]{Integer.toString(contaId)};
+        String selection = ContaEntry.TABLE_NAME + "." + ContaEntry._ID + " = ? ";
+
+        return  mOpenHelper.getReadableDatabase().query(ContaEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
     }
     private Cursor getMovimentacoesByContaId(Uri uri, String[] projection, String sortOrder) {
         Integer contaId = MovimentacaoEntry.getContaIdFromUri(uri);
