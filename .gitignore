@@ -9,3 +9,8 @@
 .externalNativeBuild
 
 .idea/
+
+/backend/build
+/motivationquotes-android/build
+/motivationquotes-lib/build
+/ricardo-lib/build
