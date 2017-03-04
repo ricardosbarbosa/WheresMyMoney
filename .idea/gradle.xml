@@ -9,7 +9,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/motivationquotes" />
+            <option value="$PROJECT_DIR$/backend" />
+            <option value="$PROJECT_DIR$/motivationquotes-android" />
+            <option value="$PROJECT_DIR$/motivationquotes-lib" />
+            <option value="$PROJECT_DIR$/ricardo-lib" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
