@@ -3,6 +3,8 @@ package com.github.ricardobarbosa.motivationquotes;
 
 import android.os.AsyncTask;
 
+import com.github.ricardosbarbosa.ricardoslib.AsyncTaskDelegate;
+
 import java.io.IOException;
 
 import okhttp3.OkHttpClient;
