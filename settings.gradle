@@ -1,1 +1,1 @@
-include ':app', ':motivationquotes'
+include ':app', ':motivationquotes-android', ':motivationquotes-lib', ':backend', ':ricardo-lib'
