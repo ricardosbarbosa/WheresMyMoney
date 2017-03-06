@@ -111,7 +111,7 @@ public class MovimentacaoCursorAdapter extends CursorRecyclerViewAdapter<Movimen
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        notifyItemMoved(fromPosition, toPosition);
-        return true;
+//        notifyItemMoved(fromPosition, toPosition);
+        return false;
     }
 }
