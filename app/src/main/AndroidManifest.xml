@@ -120,6 +120,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.ricardobarbosa.wheresmymoney.activity.MovimentacaoListActivity" />
         </activity>
+        <activity
+            android:name=".activity.TransferenciaFormActivity"
+            android:label="Transferência"
+            android:parentActivityName=".activity.MovimentacaoListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.github.ricardobarbosa.wheresmymoney.activity.MovimentacaoListActivity" />
+        </activity>
 
         <receiver android:name=".widget.ContasWidget">
             <intent-filter>
