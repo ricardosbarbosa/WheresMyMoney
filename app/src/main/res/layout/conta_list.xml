@@ -1,13 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/conta_list"
-    android:name="com.github.ricardobarbosa.wheresmymoney.activity.ContaListFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
-    tools:context="com.github.ricardobarbosa.wheresmymoney.activity.ContaListActivity"
-    tools:listitem="@layout/conta_list_content" />
+    tools:context="com.github.ricardobarbosa.wheresmymoney.activity.ContaListActivity">
+
+    <!-- Footer aligned to bottom -->
+
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:layout_centerInParent="true"
+            android:text="Fixed Footer"
+            android:gravity="end"
+            android:textAlignment="textEnd"
+            android:textColor="@android:color/white"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textSize="20sp"
+            android:paddingRight="10dp" />
+    </RelativeLayout>
+
+    <!-- Content below header and above footer -->
+
+    <RelativeLayout
+        android:id="@+id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/footer"
+        android:gravity="center" >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/conta_list"
+            android:name="com.github.ricardobarbosa.wheresmymoney.activity.ContaListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            app:layoutManager="LinearLayoutManager"
+            tools:context="com.github.ricardobarbosa.wheresmymoney.activity.ContaListActivity"
+            tools:listitem="@layout/conta_list_content" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

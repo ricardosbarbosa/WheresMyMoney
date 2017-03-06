@@ -4,6 +4,7 @@ package com.github.ricardobarbosa.wheresmymoney.activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.renderscript.Double2;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -17,11 +18,14 @@ import android.widget.ListView;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.github.ricardobarbosa.wheresmymoney.R;
 
 import com.github.ricardobarbosa.wheresmymoney.adapters.ContaCursorAdapter;
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract;
+
+import java.text.DecimalFormat;
 
 /**
  * An activity representing a list of Contas. This activity
@@ -139,12 +143,25 @@ public class ContaListActivity extends AppCompatActivity implements LoaderManage
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        updateRodape(data);
         mAdapter.swapCursor(data);
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
             recyclerView.smoothScrollToPosition(mPosition);
         }
+
+
+    }
+
+    private void updateRodape(Cursor data) {
+        TextView totalTextView = (TextView) findViewById(R.id.total);
+        Double total = Double.valueOf(0);
+        while (data.moveToNext()) {
+            total += data.getDouble(data.getColumnIndex(WIMMContract.ContaEntry.COLUMN_SALDO));
+        }
+        totalTextView.setText(new DecimalFormat("R$ ##.##").format(total));
     }
 
     @Override
