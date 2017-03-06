@@ -25,6 +25,12 @@
             android:layout_height="10dp"
             android:background="@drawable/bolinha_vermelha"
             />
+        <View
+            android:id="@+id/bolinha_azul"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/bolinha_azul"
+            />
     </FrameLayout>
 
     <LinearLayout

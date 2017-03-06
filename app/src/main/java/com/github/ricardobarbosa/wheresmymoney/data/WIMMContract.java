@@ -113,31 +113,31 @@ public class WIMMContract {
 
     }
 
-    static final class TransferenciaEntry implements BaseColumns {
-        static final Uri CONTENT_URI =
+    public static final class TransferenciaEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRANSFERENCIA).build();
-        static final String CONTENT_TYPE =
+        public static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TRANSFERENCIA;
-        static final String CONTENT_ITEM_TYPE =
+        public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TRANSFERENCIA;
 
-        static final String TABLE_NAME = "transferencia";
+        public static final String TABLE_NAME = "transferencia";
 
         // Column with the foreign key into the categoria table.
         //representa os dados normais de uma movimentacao
-        static final String COLUMN_MOVIMENTACAO_KEY = "movimentacao_id";
+        public static final String COLUMN_MOVIMENTACAO_KEY = "movimentacao_id";
         //transferencia eh uma movimentacao com categoria destino
-        static final String COLUMN_CONTA_DESTINO_KEY = "conta_destino_id";
+        public static final String COLUMN_CONTA_DESTINO_KEY = "conta_destino_id";
 
-        static Uri buildTransferenciaUri(long id) {
+        public static Uri buildTransferenciaUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        static Integer getContaIdFromUri(Uri uri) {
+        public static Integer getContaIdFromUri(Uri uri) {
             return Integer.parseInt((uri.getPathSegments().get(2)));
         }
 
-        static Integer getCategoriaIdFromUri(Uri uri) {
+        public static Integer getCategoriaIdFromUri(Uri uri) {
             return Integer.parseInt((uri.getPathSegments().get(2)));
         }
     }

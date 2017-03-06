@@ -11,6 +11,7 @@ public class MovimentacaoViewHolder extends RecyclerView.ViewHolder {
     public final View mView;
     public final View mBolinhaDespesa;
     public final View mBolinhaReceita;
+    public final View mBolinhaTransferencia;
     public final TextView mDescricaoView;
     public final TextView mValorView;
     public final TextView mDataView;
@@ -25,6 +26,7 @@ public class MovimentacaoViewHolder extends RecyclerView.ViewHolder {
         mValorView = (TextView) view.findViewById(R.id.valor);
         mBolinhaDespesa = (View) view.findViewById(R.id.bolinha_vermelha);
         mBolinhaReceita = (View) view.findViewById(R.id.bolinha_verde);
+        mBolinhaTransferencia = (View) view.findViewById(R.id.bolinha_azul);
         mCategoriaView = (TextView) view.findViewById(R.id.categoria);
     }
 

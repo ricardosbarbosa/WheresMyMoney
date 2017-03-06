@@ -97,6 +97,14 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
             }
         });
 
+        FloatingActionButton fabTransferencia = (FloatingActionButton) findViewById(R.id.fab_transferencia);
+        fabTransferencia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), TransferenciaFormActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         View view = findViewById(R.id.movimentacao_list);

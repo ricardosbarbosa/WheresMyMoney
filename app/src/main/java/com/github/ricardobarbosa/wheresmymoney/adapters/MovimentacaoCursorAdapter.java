@@ -61,6 +61,7 @@ public class MovimentacaoCursorAdapter extends CursorRecyclerViewAdapter<Movimen
         holder.mCategoriaView.setText(movimentacao.getCategoria().getNome());
         holder.mBolinhaDespesa.setVisibility(movimentacao.getTipo().equals(EnumMovimentacaoTipo.DESPESA) ? View.VISIBLE : View.INVISIBLE) ;
         holder.mBolinhaReceita.setVisibility(movimentacao.getTipo().equals(EnumMovimentacaoTipo.RECEITA) ? View.VISIBLE : View.INVISIBLE) ;
+        holder.mBolinhaTransferencia.setVisibility(movimentacao.getTipo().equals(EnumMovimentacaoTipo.TRANSFERENCIA) ? View.VISIBLE : View.INVISIBLE) ;
         String dataStr = (new SimpleDateFormat("dd/MM/yyyy")).format(movimentacao.getData());
         holder.mDataView.setText(dataStr);
 
