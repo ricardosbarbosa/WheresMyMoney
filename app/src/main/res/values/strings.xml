@@ -109,4 +109,7 @@
     </string-array>
     <string name="title_categoria_list">Categorias</string>
     <string name="title_categoria_detail">Categoria Detail</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 </resources>
