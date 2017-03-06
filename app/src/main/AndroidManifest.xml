@@ -120,6 +120,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.ricardobarbosa.wheresmymoney.activity.MovimentacaoListActivity" />
         </activity>
+
+        <receiver android:name=".widget.ContasWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/contas_widget_info" />
+        </receiver>
+
+        <activity android:name=".widget.ContasWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
