@@ -1,6 +1,7 @@
 package com.github.ricardobarbosa.wheresmymoney.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.github.ricardobarbosa.motivationquotes.QuoteActivity;
 import com.github.ricardobarbosa.wheresmymoney.R;
 import com.github.ricardobarbosa.wheresmymoney.fragment.CategoriaDetailFragment;
 import com.github.ricardobarbosa.wheresmymoney.fragment.ContaFormFragment;
@@ -74,6 +76,8 @@ public class MovimentacaoFormActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (formFragment.validate()) {
                     NavUtils.navigateUpFromSameTask((Activity) v.getContext());
+                    Intent intent = new Intent(v.getContext(), QuoteActivity.class);
+                    startActivity(intent);
                 }
             }
         });
