@@ -38,6 +38,7 @@ dependencies {
     compile 'com.github.dkharrat.nexusdialog:nexusdialog:0.4.1'
     compile 'com.github.clans:fab:1.6.4'
     compile project(':motivationquotes-android')
+    compile 'com.android.support:mediarouter-v7:25.2.0'
 }
 
 
