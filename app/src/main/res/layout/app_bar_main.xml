@@ -59,6 +59,14 @@
             app:fab_size="mini"
             app:fab_label="Receitas"
             app:fab_colorNormal="@color/green_a700"/>
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_transferencia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            app:fab_size="mini"
+            app:fab_label="Transferência"
+            app:fab_colorNormal="@color/material_deep_teal_200"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 
