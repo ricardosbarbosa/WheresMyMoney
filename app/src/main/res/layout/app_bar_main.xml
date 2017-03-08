@@ -39,6 +39,7 @@
     </FrameLayout>
 
     <com.github.clans.fab.FloatingActionMenu
+        android:contentDescription="@string/fab_add"
         android:id="@+id/menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,6 +54,7 @@
         android:layout_margin="@dimen/fab_margin">
 
         <com.github.clans.fab.FloatingActionButton
+            android:contentDescription="@string/fab_add_despesa"
             android:id="@+id/fab_despesas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,6 +63,7 @@
             app:fab_label="Despesas"
             app:fab_colorNormal="@color/red_a700"/>
         <com.github.clans.fab.FloatingActionButton
+            android:contentDescription="@string/fab_add_receita"
             android:id="@+id/fab_receitas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,6 +72,7 @@
             app:fab_label="Receitas"
             app:fab_colorNormal="@color/green_a700"/>
         <com.github.clans.fab.FloatingActionButton
+            android:contentDescription="@string/fab_add_transferencia"
             android:id="@+id/fab_transferencia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

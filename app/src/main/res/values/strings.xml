@@ -130,4 +130,9 @@
     <string name="falta_criar_conta">Cadastre uma conta antes.</string>
     <string name="cadastrar_conta">Cadastrar conta</string>
     <string name="cone">Ícone</string>
+    <string name="fab_detail">Detalhar</string>
+    <string name="fab_add_despesa">Adicionar despesa</string>
+    <string name="fab_add_receita">Adicionar receita</string>
+    <string name="fab_add_transferencia">Adicionar transferencia</string>
+    <string name="fab_add">Adicionar movimentacao</string>
 </resources>
