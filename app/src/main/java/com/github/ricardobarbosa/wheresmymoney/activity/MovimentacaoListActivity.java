@@ -39,6 +39,8 @@ import com.google.android.gms.ads.AdView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import static com.github.ricardobarbosa.wheresmymoney.data.WIMMContract.*;
+
 /**
  * An activity representing a list of Movimentacoes. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -83,9 +85,11 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
         fabDespesas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), MovimentacaoFormActivity.class);
-                intent.putExtra("tipo", EnumMovimentacaoTipo.DESPESA.name());
-                startActivity(intent);
+                if (haContasCadastradas(view)) {
+                    Intent intent = new Intent(view.getContext(), MovimentacaoFormActivity.class);
+                    intent.putExtra("tipo", EnumMovimentacaoTipo.DESPESA.name());
+                    startActivity(intent);
+                }
             }
         });
 
@@ -93,9 +97,11 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
         fabReceitas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), MovimentacaoFormActivity.class);
-                intent.putExtra("tipo", EnumMovimentacaoTipo.RECEITA.name());
-                startActivity(intent);
+                if (haContasCadastradas(view)) {
+                    Intent intent = new Intent(view.getContext(), MovimentacaoFormActivity.class);
+                    intent.putExtra("tipo", EnumMovimentacaoTipo.RECEITA.name());
+                    startActivity(intent);
+                }
             }
         });
 
@@ -103,8 +109,10 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
         fabTransferencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), TransferenciaFormActivity.class);
-                startActivity(intent);
+                if (haContasCadastradas(view)) {
+                    Intent intent = new Intent(view.getContext(), TransferenciaFormActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -175,6 +183,26 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
 
     }
 
+    private boolean haContasCadastradas(View view) {
+//        WIMMDbHelper mOpenHelper = new WIMMDbHelper(this);
+//        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        Cursor cursor = getContentResolver().query(ContaEntry.CONTENT_URI, null, null, null, null);
+
+        if (!cursor.moveToFirst()) {
+            Snackbar snackbar = Snackbar.make(view, getResources().getText(R.string.falta_criar_conta), Snackbar.LENGTH_LONG);
+            snackbar.setAction(getResources().getText(R.string.cadastrar_conta), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), ContaFormActivity.class);
+                    startActivity(intent);
+                }
+            });
+            snackbar.show();
+        }
+
+        return cursor.moveToFirst();
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -226,10 +254,10 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
 
                     WIMMDbHelper mOpenHelper = new WIMMDbHelper(v.getContext());
                     SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-                    db.execSQL("delete from "+ WIMMContract.TransferenciaEntry.TABLE_NAME);
-                    db.execSQL("delete from "+ WIMMContract.MovimentacaoEntry.TABLE_NAME);
-                    db.execSQL("delete from "+ WIMMContract.CategoriaEntry.TABLE_NAME);
-                    db.execSQL("delete from "+ WIMMContract.ContaEntry.TABLE_NAME);
+                    db.execSQL("delete from "+ TransferenciaEntry.TABLE_NAME);
+                    db.execSQL("delete from "+ MovimentacaoEntry.TABLE_NAME);
+                    db.execSQL("delete from "+ CategoriaEntry.TABLE_NAME);
+                    db.execSQL("delete from "+ ContaEntry.TABLE_NAME);
 
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.signOut();
@@ -249,10 +277,10 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String sortOrder = WIMMContract.MovimentacaoEntry.COLUMN_DATA + " DESC";
+        String sortOrder = MovimentacaoEntry.COLUMN_DATA + " DESC";
 
         return new CursorLoader(this,
-                WIMMContract.MovimentacaoEntry.CONTENT_URI,
+                MovimentacaoEntry.CONTENT_URI,
                 null,
                 null,
                 null,
