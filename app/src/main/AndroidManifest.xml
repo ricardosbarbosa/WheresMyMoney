@@ -50,6 +50,7 @@
 
         <provider
             android:name=".data.WIMMDataProvider"
+            android:exported="true"
             android:authorities="com.github.ricardosbarbosa.whereismymoney.app" />
 
         <activity
