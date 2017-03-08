@@ -30,7 +30,7 @@ public class FetchUnsplashImageTask extends AsyncTask<Void, Void, String> {
                 .url(FORECAST_BASE_URL)
                 .build();
 
-        Response response = null;
+        Response response;
         try {
             response = client.newCall(request).execute();
             return response.request().url().toString();

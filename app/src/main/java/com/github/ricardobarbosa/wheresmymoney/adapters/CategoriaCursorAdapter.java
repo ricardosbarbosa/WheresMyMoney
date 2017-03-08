@@ -26,7 +26,7 @@ public class CategoriaCursorAdapter extends CursorRecyclerViewAdapter<CategoriaV
 
     public CategoriaCursorAdapter(Context context, Cursor cursor, boolean mTwoPane){
         super(context,cursor);
-        this.mTwoPane = mTwoPane;;
+        this.mTwoPane = mTwoPane;
     }
 
     @Override

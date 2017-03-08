@@ -15,9 +15,6 @@ import com.github.ricardobarbosa.wheresmymoney.model.Movimentacao;
 
 /**
  * A fragment representing a single Movimentacao detail screen.
- * This fragment is either contained in a {@link MovimentacaoListActivity}
- * in two-pane mode (on tablets) or a {@link MovimentacaoDetailActivity}
- * on handsets.
  */
 public class MovimentacaoDetailFragment extends Fragment {
 
@@ -46,9 +43,7 @@ public class MovimentacaoDetailFragment extends Fragment {
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-//                appBarLayout.setTitle(categoria.getDescricao());
-            }
+
         }
     }
 

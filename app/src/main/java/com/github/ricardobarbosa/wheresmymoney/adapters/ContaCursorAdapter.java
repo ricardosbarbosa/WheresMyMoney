@@ -26,7 +26,7 @@ public class ContaCursorAdapter extends CursorRecyclerViewAdapter<ContaViewHolde
 
     public ContaCursorAdapter(Context context, Cursor cursor, boolean mTwoPane){
         super(context,cursor);
-        this.mTwoPane = mTwoPane;;
+        this.mTwoPane = mTwoPane;
     }
 
     @Override

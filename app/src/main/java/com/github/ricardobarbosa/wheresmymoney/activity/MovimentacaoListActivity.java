@@ -187,8 +187,14 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
 //        WIMMDbHelper mOpenHelper = new WIMMDbHelper(this);
 //        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         Cursor cursor = getContentResolver().query(ContaEntry.CONTENT_URI, null, null, null, null);
+        boolean temConta = false;
+        if (cursor != null) {
+            temConta = cursor.moveToFirst();
+            cursor.close();
+        }
 
-        if (!cursor.moveToFirst()) {
+
+        if (!temConta) {
             Snackbar snackbar = Snackbar.make(view, getResources().getText(R.string.falta_criar_conta), Snackbar.LENGTH_LONG);
             snackbar.setAction(getResources().getText(R.string.cadastrar_conta), new View.OnClickListener() {
                 @Override
@@ -200,7 +206,7 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
             snackbar.show();
         }
 
-        return cursor.moveToFirst();
+        return temConta;
     }
 
     @Override

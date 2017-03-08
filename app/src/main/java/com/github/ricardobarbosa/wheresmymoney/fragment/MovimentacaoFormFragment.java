@@ -98,6 +98,7 @@ public class MovimentacaoFormFragment extends FormFragment {
 
         cursor.moveToFirst();
         Conta conta = new Conta(cursor);
+        cursor.close();
 
         Double valor = Double.valueOf(getModel().getValue(VALOR).toString());
         Double saldo;
@@ -118,7 +119,7 @@ public class MovimentacaoFormFragment extends FormFragment {
     @SuppressLint("LongLogTag")
     private void insertMovimentacaoTransaction(EnumMovimentacaoTipo enumMovimentacaoTipo) {
         WIMMDbHelper mOpenHelper = new WIMMDbHelper(getContext());
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase();;
+        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         db.beginTransaction();
         try {
 
@@ -137,19 +138,22 @@ public class MovimentacaoFormFragment extends FormFragment {
     private void configureCategorias() {
         Cursor cursor = getContext().getContentResolver().query(CategoriaEntry.CONTENT_URI, null, null, null, null);
 
-        if (!cursor.moveToFirst()) {
-            Resources resources = getResources();
-            String[] receitas = resources.getStringArray(R.array.receitas);
-            String[] despesas = resources.getStringArray(R.array.despesas);
-            String[] lancamentos = resources.getStringArray(R.array.lancamentos);
+        if (cursor != null) {
+            if (!cursor.moveToFirst()) {
+                Resources resources = getResources();
+                String[] receitas = resources.getStringArray(R.array.receitas);
+                String[] despesas = resources.getStringArray(R.array.despesas);
+                String[] lancamentos = resources.getStringArray(R.array.lancamentos);
 
-            for (String[] array: new String[][]{receitas, despesas, lancamentos}) {
-                for (String nome : array) {
-                    ContentValues values = new ContentValues();
-                    values.put(WIMMContract.CategoriaEntry.COLUMN_NOME, nome);
-                    Uri insertedUri = getContext().getContentResolver().insert(WIMMContract.CategoriaEntry.CONTENT_URI, values);
+                for (String[] array: new String[][]{receitas, despesas, lancamentos}) {
+                    for (String nome : array) {
+                        ContentValues values = new ContentValues();
+                        values.put(WIMMContract.CategoriaEntry.COLUMN_NOME, nome);
+                        Uri insertedUri = getContext().getContentResolver().insert(WIMMContract.CategoriaEntry.CONTENT_URI, values);
+                    }
                 }
             }
+            cursor.close();
         }
 
     }
@@ -169,26 +173,30 @@ public class MovimentacaoFormFragment extends FormFragment {
 
         List<String> contas = new ArrayList<>();
         List<Integer> contasIds = new ArrayList<>();
-        while (!cursor.isLast()){
-            cursor.moveToNext();
-            contas.add(cursor.getString(cursor.getColumnIndex(ContaEntry.COLUMN_NOME)));
-            contasIds.add(cursor.getInt(cursor.getColumnIndex(ContaEntry._ID)));
+        if (cursor != null) {
+            while (!cursor.isLast()) {
+                cursor.moveToNext();
+                contas.add(cursor.getString(cursor.getColumnIndex(ContaEntry.COLUMN_NOME)));
+                contasIds.add(cursor.getInt(cursor.getColumnIndex(ContaEntry._ID)));
+            }
+            section.addElement(new SelectionController(ctxt, CONTA, "Conta", true, "Select", contas, contasIds));
+            cursor.close();
         }
-        section.addElement(new SelectionController(ctxt, CONTA, "Conta", true, "Select", contas, contasIds ));
-
 
         final String sortCategoriaOrder = CategoriaEntry.COLUMN_NOME + " ASC " ;
         Cursor cursorCategoria = getContext().getContentResolver().query(CategoriaEntry.CONTENT_URI, null, null, null, sortCategoriaOrder);
 
         List<String> categoriasNomes = new ArrayList<>();
         List<Integer> categoriasIds = new ArrayList<>();
-        while (!cursorCategoria.isLast()){
-            cursorCategoria.moveToNext();
-            categoriasNomes.add(cursorCategoria.getString(cursorCategoria.getColumnIndex(CategoriaEntry.COLUMN_NOME)));
-            categoriasIds.add(cursorCategoria.getInt(cursorCategoria.getColumnIndex(CategoriaEntry._ID)));
+        if (cursorCategoria != null) {
+            while (!cursorCategoria.isLast()) {
+                cursorCategoria.moveToNext();
+                categoriasNomes.add(cursorCategoria.getString(cursorCategoria.getColumnIndex(CategoriaEntry.COLUMN_NOME)));
+                categoriasIds.add(cursorCategoria.getInt(cursorCategoria.getColumnIndex(CategoriaEntry._ID)));
+            }
+            section.addElement(new SelectionController(ctxt, CATEGORIA, "Categoria", true, "Select", categoriasNomes, categoriasIds ));
+            cursorCategoria.close();
         }
-        section.addElement(new SelectionController(ctxt, CATEGORIA, "Categoria", true, "Select", categoriasNomes, categoriasIds ));
-
 
 //        section.addElement(new SelectionController(ctxt, TIPO, "Tipo", true, "Select", Arrays.asList(EnumContaTipo.names()), true));
 

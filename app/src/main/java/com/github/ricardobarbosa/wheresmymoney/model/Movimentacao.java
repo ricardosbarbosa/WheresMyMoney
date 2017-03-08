@@ -18,8 +18,6 @@ public class Movimentacao implements Parcelable{
 
     public static final String PARCELABLE_KEY = "movimentacao";
 
-    private Integer id;
-
     private Conta conta;
     private Categoria categoria;
 
@@ -41,7 +39,6 @@ public class Movimentacao implements Parcelable{
     }
 
     public Movimentacao(Cursor cursor){
-        this.id = cursor.getInt(cursor.getColumnIndex(WIMMContract.ContaEntry._ID));
         this.descricao = cursor.getString(cursor.getColumnIndex(MovimentacaoEntry.COLUMN_DESCRICAO));
         this.tipo = EnumMovimentacaoTipo.valueOf(cursor.getString(cursor.getColumnIndex(MovimentacaoEntry.COLUMN_TIPO)));
         this.valor = cursor.getDouble(cursor.getColumnIndex(MovimentacaoEntry.COLUMN_VALOR));

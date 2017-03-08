@@ -135,4 +135,6 @@
     <string name="fab_add_receita">Adicionar receita</string>
     <string name="fab_add_transferencia">Adicionar transferencia</string>
     <string name="fab_add">Adicionar movimentacao</string>
+    <string name="android_studio">Android Studio</string>
+    <string name="andoid_studio_email">android.studio@android.com</string>
 </resources>
