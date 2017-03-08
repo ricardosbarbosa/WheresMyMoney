@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:paddingEnd="10dp"
             android:layout_centerInParent="true"
-            android:text="Fixed Footer"
+            android:text="@string/fixed_footer"
             android:gravity="end"
             android:textAlignment="textEnd"
             android:textColor="@android:color/white"

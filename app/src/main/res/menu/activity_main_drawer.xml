@@ -6,14 +6,14 @@
         <item
             android:id="@+id/nav_contas"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Contas" />
+            android:title="@string/contas" />
         <item
             android:id="@+id/nav_categorias"
             android:icon="@drawable/ic_menu_share"
-            android:title="Categorias" />
+            android:title="@string/categorias" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/communicate">
         <menu>
             <item
                 android:id="@+id/nav_logout"

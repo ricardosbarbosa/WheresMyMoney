@@ -113,4 +113,21 @@
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="title_transferencia_detail">Transferência</string>
+    <string name="contas">Contas</string>
+    <string name="categorias">Categorias</string>
+    <string name="communicate">Communicate</string>
+    <string name="fixed_footer">Fixed Footer</string>
+    <string name="line">The following form is contained in a fragment</string>
+    <string name="submit">submit</string>
+    <string name="title_activity_xxx">XXXActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <!-- -
+        This is an ad unit ID for a banner test ad. Replace with your own banner ad unit id.
+        For more information, see https://support.google.com/admob/answer/3052638
+    <!- -->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="falta_criar_conta">Cadastre uma conta antes.</string>
+    <string name="cadastrar_conta">Cadastrar conta</string>
+    <string name="cone">Ícone</string>
 </resources>
