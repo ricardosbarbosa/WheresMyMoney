@@ -2,15 +2,12 @@ package com.github.ricardobarbosa.wheresmymoney.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract.ContaEntry;
-import com.google.firebase.database.Exclude;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,7 +89,6 @@ public class Conta implements Parcelable{
                 && tipo != null;
     }
 
-    @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("nome", nome);
