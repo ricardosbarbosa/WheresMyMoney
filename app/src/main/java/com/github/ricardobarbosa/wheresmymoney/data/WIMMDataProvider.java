@@ -15,12 +15,12 @@ import static com.github.ricardobarbosa.wheresmymoney.data.WIMMContract.*;
 /**
  * Created by ricardobarbosa on 31/01/17.
  */
-public class WhereIsMyMoneyDataProvider extends ContentProvider {
+public class WIMMDataProvider extends ContentProvider {
 
-    private static final String TAG = "WhereIsMyMoneyDataProvider";
+    private static final String TAG = "WIMMDataProvider";
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private MovieDbHelper mOpenHelper;
+    private WIMMDbHelper mOpenHelper;
 
 
     static final int CONTA = 100;
@@ -89,7 +89,7 @@ public class WhereIsMyMoneyDataProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mOpenHelper = new MovieDbHelper(getContext());
+        mOpenHelper = new WIMMDbHelper(getContext());
         return true;
     }
 

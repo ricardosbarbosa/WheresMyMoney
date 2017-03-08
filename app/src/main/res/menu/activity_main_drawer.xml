@@ -11,10 +11,6 @@
             android:id="@+id/nav_categorias"
             android:icon="@drawable/ic_menu_share"
             android:title="Categorias" />
-        <item
-            android:id="@+id/nav_movimentacoes"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Movimentacoes" />
     </group>
 
     <item android:title="Communicate">

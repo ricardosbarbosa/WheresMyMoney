@@ -11,14 +11,14 @@ import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract.*;
 /**
  * Created by ricardobarbosa on 31/01/17.
  */
-public class MovieDbHelper extends SQLiteOpenHelper {
+public class WIMMDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 10;
 
-    static final String DATABASE_NAME = "whereismymoney.db";
+    public static final String DATABASE_NAME = "whereismymoney.db";
 
-    public MovieDbHelper(Context context) {
+    public WIMMDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

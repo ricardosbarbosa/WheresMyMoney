@@ -3,6 +3,8 @@ package com.github.ricardobarbosa.wheresmymoney.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -77,6 +79,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 
         setContentView(R.layout.activity_login2);
 
+        final Context context = this;
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

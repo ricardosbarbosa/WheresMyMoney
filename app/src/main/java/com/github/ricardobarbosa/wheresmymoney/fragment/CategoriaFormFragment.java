@@ -55,7 +55,7 @@ public class CategoriaFormFragment extends FormFragment {
 
         FormSectionController section = new FormSectionController(ctxt, "");
 
-        section.addElement(new EditTextController(ctxt, NOME, "Name", "Conta Corrente", true, InputType.TYPE_CLASS_TEXT));
+        section.addElement(new EditTextController(ctxt, NOME, "Nome", "Ex. cinema", true, InputType.TYPE_CLASS_TEXT));
 
         controller.addSection(section);
     }

@@ -1,13 +1,13 @@
 package com.github.ricardobarbosa.wheresmymoney.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteQueryBuilder;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -17,13 +17,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,14 +31,11 @@ import com.github.ricardobarbosa.wheresmymoney.R;
 import com.github.ricardobarbosa.wheresmymoney.adapters.MovimentacaoCursorAdapter;
 import com.github.ricardobarbosa.wheresmymoney.adapters.OnStartDragListener;
 import com.github.ricardobarbosa.wheresmymoney.adapters.SimpleItemTouchHelperCallback;
+import com.github.ricardobarbosa.wheresmymoney.data.WIMMDbHelper;
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract;
-import com.github.ricardobarbosa.wheresmymoney.data.WhereIsMyMoneyDataProvider;
-import com.github.ricardobarbosa.wheresmymoney.fragment.MovimentacaoDetailFragment;
 import com.github.ricardobarbosa.wheresmymoney.model.EnumMovimentacaoTipo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.List;
 
 /**
  * An activity representing a list of Movimentacoes. This activity
@@ -216,9 +210,28 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
         } else if (id == R.id.nav_categorias) {
             Intent intent = new Intent(this, CategoriaListActivity.class);
             this.startActivity(intent);
-        } else if (id == R.id.nav_movimentacoes) {
-            Intent intent = new Intent(this, MovimentacaoListActivity.class);
-            this.startActivity(intent);
+        } else if (id == R.id.nav_logout) {
+            Snackbar snackbar = Snackbar.make(this.recyclerView, "Ao sair seus dados de contas e movimentacoes serão perdidos.", Snackbar.LENGTH_LONG);
+            snackbar.setAction("Confirmar", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    WIMMDbHelper mOpenHelper = new WIMMDbHelper(v.getContext());
+                    SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+                    db.execSQL("delete from "+ WIMMContract.TransferenciaEntry.TABLE_NAME);
+                    db.execSQL("delete from "+ WIMMContract.MovimentacaoEntry.TABLE_NAME);
+                    db.execSQL("delete from "+ WIMMContract.CategoriaEntry.TABLE_NAME);
+                    db.execSQL("delete from "+ WIMMContract.ContaEntry.TABLE_NAME);
+
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    mAuth.signOut();
+                    Intent intent = new Intent(v.getContext(), LoginActivity2.class);
+                    startActivity(intent);
+                }
+            });
+            snackbar.show();
+
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -228,7 +241,7 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String sortOrder = WIMMContract.MovimentacaoEntry.COLUMN_DATA + " ASC";
+        String sortOrder = WIMMContract.MovimentacaoEntry.COLUMN_DATA + " DESC";
 
         return new CursorLoader(this,
                 WIMMContract.MovimentacaoEntry.CONTENT_URI,
