@@ -34,6 +34,8 @@ import com.github.ricardobarbosa.wheresmymoney.adapters.SimpleItemTouchHelperCal
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMDbHelper;
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract;
 import com.github.ricardobarbosa.wheresmymoney.model.EnumMovimentacaoTipo;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -70,6 +72,12 @@ public class MovimentacaoListActivity extends AppCompatActivity implements Navig
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
+
+        // Load an ad into the AdMob banner view.
+        AdView adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .setRequestAgent("android_studio:ad_template").build();
+        adView.loadAd(adRequest);
 
         FloatingActionButton fabDespesas = (FloatingActionButton) findViewById(R.id.fab_despesas);
         fabDespesas.setOnClickListener(new View.OnClickListener() {
