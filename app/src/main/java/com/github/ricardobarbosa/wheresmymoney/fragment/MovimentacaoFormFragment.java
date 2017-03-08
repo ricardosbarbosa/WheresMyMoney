@@ -1,10 +1,13 @@
 package com.github.ricardobarbosa.wheresmymoney.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -15,10 +18,13 @@ import com.github.dkharrat.nexusdialog.controllers.DatePickerController;
 import com.github.dkharrat.nexusdialog.controllers.EditTextController;
 import com.github.dkharrat.nexusdialog.controllers.FormSectionController;
 import com.github.dkharrat.nexusdialog.controllers.SelectionController;
+import com.github.ricardobarbosa.wheresmymoney.R;
+import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract;
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMDbHelper;
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract.CategoriaEntry;
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract.ContaEntry;
 import com.github.ricardobarbosa.wheresmymoney.data.WIMMContract.MovimentacaoEntry;
+import com.github.ricardobarbosa.wheresmymoney.model.Categoria;
 import com.github.ricardobarbosa.wheresmymoney.model.Conta;
 import com.github.ricardobarbosa.wheresmymoney.model.EnumMovimentacaoTipo;
 
@@ -128,9 +134,30 @@ public class MovimentacaoFormFragment extends FormFragment {
         }
     }
 
+    private void configureCategorias() {
+        Cursor cursor = getContext().getContentResolver().query(CategoriaEntry.CONTENT_URI, null, null, null, null);
 
+        if (!cursor.moveToFirst()) {
+            Resources resources = getResources();
+            String[] receitas = resources.getStringArray(R.array.receitas);
+            String[] despesas = resources.getStringArray(R.array.despesas);
+            String[] lancamentos = resources.getStringArray(R.array.lancamentos);
+
+            for (String[] array: new String[][]{receitas, despesas, lancamentos}) {
+                for (String nome : array) {
+                    ContentValues values = new ContentValues();
+                    values.put(WIMMContract.CategoriaEntry.COLUMN_NOME, nome);
+                    Uri insertedUri = getContext().getContentResolver().insert(WIMMContract.CategoriaEntry.CONTENT_URI, values);
+                }
+            }
+        }
+
+    }
     @Override
     public void initForm(FormController controller) {
+
+        configureCategorias();
+
         Context ctxt = getContext();
 
         FormSectionController section = new FormSectionController(ctxt, "");
